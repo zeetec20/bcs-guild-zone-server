@@ -1,0 +1,38 @@
+{
+  "name": "bcs-guild-zone-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "export NODE_ENV=production ; node src/server.js",
+    "start:dev": "export NODE_ENV=development ; nodemon src/server.js",
+    "refresh-token-secret": "node src/helper/gen_token_secret.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeetec20/bcs-guild-zone-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeetec20/bcs-guild-zone-server/issues"
+  },
+  "homepage": "https://github.com/zeetec20/bcs-guild-zone-server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "firebase": "^9.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.0",
+    "multer": "*",
+    "nodemailer": "^6.8.0",
+    "nodemon": "^2.0.20",
+    "sharp": "^0.31.1",
+    "swagger-ui-express": "^4.5.0",
+    "uuid": "^9.0.0"
+  }
+}

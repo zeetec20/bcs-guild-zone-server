@@ -1,0 +1,521 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Guild Zone",
+        "version": "1.0.0",
+        "description": "Documentations for API application Guild Zone"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Development"
+        },
+        {
+            "url": "https://",
+            "description": "Production"
+        }
+    ],
+    "tags": [
+        {
+            "name": "User",
+            "description": "User routes"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Gamer",
+                    "Guild Manager"
+                ],
+                "description": "sign in for guild manager or gamer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "access_token": {
+                                                    "type": "string",
+                                                    "description": "Access token for access auth API"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "example": "Bearer"
+                                                },
+                                                "expires_in": {
+                                                    "type": "number",
+                                                    "example": 3600
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "UNAUTHORIZED, email or password is incorrect",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response401"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guild-manager/register": {
+            "post": {
+                "tags": [
+                    "Guild Manager"
+                ],
+                "description": "sign up for game manager",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/GuildManagerResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guild-manager/create-guild": {
+            "post": {
+                "tags": [
+                    "Guild Manager"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "create guild",
+                "requestBody": {
+                    "content": {
+                        "application/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Axie Zone"
+                                    },
+                                    "banner": {
+                                        "type": "string",
+                                        "description": "image for banner",
+                                        "format": "binary"
+                                    },
+                                    "twitter": {
+                                        "type": "string"
+                                    },
+                                    "telegram": {
+                                        "type": "string"
+                                    },
+                                    "discord": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "total_member": {
+                                        "type": "number"
+                                    },
+                                    "open_recruitment": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/GuildResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "UNAUTHORIZED, invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response401"
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        },
+        "/guild-manager/": {
+
+        },
+        "/gamer/register": {
+            "post": {
+                "tags": [
+                    "Gamer"
+                ],
+                "description": "sign up for gamer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Firman"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/GamerResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "GuildResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "owner": {
+                        "type": "string",
+                        "description": "uid owner guild"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Axie Zone"
+                    },
+                    "banner": {
+                        "type": "string",
+                        "description": "image for banner"
+                    },
+                    "twitter": {
+                        "type": "string"
+                    },
+                    "telegram": {
+                        "type": "string"
+                    },
+                    "discord": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "totalMember": {
+                        "type": "number"
+                    },
+                    "openRequitments": {
+                        "type": "number"
+                    },
+                    "createdAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    },
+                    "updatedAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    }
+                }
+            },
+            "GamerResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firman"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@gmail.com"
+                    },
+                    "isJoinGuild": {
+                        "type": "boolean",
+                        "enum": [
+                            false,
+                            true
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "GAMER"
+                    },
+                    "createdAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    },
+                    "updatedAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    }
+                }
+            },
+            "GuildManagerResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@gmail.com"
+                    },
+                    "isHaveGuild": {
+                        "type": "boolean",
+                        "enum": [
+                            false,
+                            true
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "GUILD_MANAGER"
+                    },
+                    "createdAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    },
+                    "updatedAt": {
+                        "type": "number",
+                        "example": "1664914914"
+                    }
+                }
+            },
+            "Response400": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 400
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "BAD_REQUEST"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {
+                                "type": "number",
+                                "example": "1664914914"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "location": {
+                                "type": "string",
+                                "example": "body"
+                            }
+                        }
+                    }
+                }
+            },
+            "Response401": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 401
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "UNAUTHORIZED"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {
+                                "type": "number",
+                                "example": "1664914914"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
