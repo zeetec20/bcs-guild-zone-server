@@ -17,8 +17,20 @@
     ],
     "tags": [
         {
-            "name": "User",
-            "description": "User routes"
+            "name": "Gamer",
+            "description": "gamer routes"
+        },
+        {
+            "name": "Guild Manager",
+            "description": "guild manager routes"
+        },
+        {
+            "name": "Guild Zone",
+            "description": "guild zone routes"
+        },
+        {
+            "name": "Guild",
+            "description": "guild routes"
         }
     ],
     "paths": {
@@ -105,6 +117,16 @@
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -167,6 +189,595 @@
                                 }
                             }
                         }
+                    },
+                    "409": {
+                        "description": "CONFLIC, email already use other user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response409"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/gamer/register": {
+            "post": {
+                "tags": [
+                    "Gamer"
+                ],
+                "description": "sign up for gamer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Firman"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "example@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/GamerResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "CONFLIC, email already use other user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response409"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Gamer",
+                    "Guild Manager"
+                ],
+                "description": "get user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "description": "only gamer",
+                                                    "example": "Firman"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "example@gmail.com"
+                                                },
+                                                "isJoinGuild": {
+                                                    "type": "boolean",
+                                                    "description": "only gamer",
+                                                    "enum": [
+                                                        false,
+                                                        true
+                                                    ]
+                                                },
+                                                "isHaveGuild": {
+                                                    "type": "boolean",
+                                                    "description": "only guild manager",
+                                                    "enum": [
+                                                        false,
+                                                        true
+                                                    ]
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "GAMER",
+                                                        "GUILD_MANAGER"
+                                                    ]
+                                                },
+                                                "createdAt": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "seconds": 1666079335,
+                                                        "nanoseconds": 308000000
+                                                    }
+                                                },
+                                                "updatedAt": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "seconds": 1666079335,
+                                                        "nanoseconds": 308000000
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "id",
+                                                "email",
+                                                "type",
+                                                "createdAt",
+                                                "updatedAt"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "UNAUTHORIZED, email or password is incorrect",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response401"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/message": {
+            "post": {
+                "tags": [
+                    "Guild Zone"
+                ],
+                "description": "send message for anonymous user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/MessageResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/games": {
+            "get": {
+                "tags": [
+                    "Guild Zone"
+                ],
+                "description": "get all games",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GameResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guilds": {
+            "get": {
+                "tags": [
+                    "Guild Zone"
+                ],
+                "description": "get all guilds",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/GuildResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guilds/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Guild"
+                ],
+                "description": "get guild",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/GuildResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guild/{guild}/join": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Guild"
+                ],
+                "description": "join guild for user gamer",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "experience": {
+                                        "type": "string"
+                                    },
+                                    "recent_game": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/MemberResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/guild/{guild}/join-anonymous": {
+            "post": {
+                "tags": [
+                    "Guild"
+                ],
+                "description": "join guild for user anonymous",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Firman"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@gmail.com"
+                                    },
+                                    "experience": {
+                                        "type": "string"
+                                    },
+                                    "recent_game": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "number",
+                                            "example": 200
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/MemberResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BAD_REQUEST, missing some parameter or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response400"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "SERVER_ERROR, something error inside server",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response500"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -189,8 +800,22 @@
                         "example": "Axie Zone"
                     },
                     "banner": {
-                        "type": "string",
-                        "description": "image for banner"
+                        "type": "string"
+                    },
+                    "logo": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "games": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GameResponse"
+                        }
                     },
                     "twitter": {
                         "type": "string"
@@ -207,16 +832,22 @@
                     "totalMember": {
                         "type": "number"
                     },
-                    "openRequitments": {
+                    "openRequitment": {
                         "type": "number"
                     },
                     "createdAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     },
                     "updatedAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     }
                 }
             },
@@ -246,12 +877,63 @@
                         "example": "GAMER"
                     },
                     "createdAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     },
                     "updatedAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    }
+                }
+            },
+            "MemberResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firman"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@gmail.com"
+                    },
+                    "experience": {
+                        "type": "string"
+                    },
+                    "recent_game": {
+                        "type": "string"
+                    },
+                    "gamer": {
+                        "type": "string"
+                    },
+                    "guild": {
+                        "type": "string"
+                    },
+                    "isAccept": {
+                        "type": "boolean"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     }
                 }
             },
@@ -277,12 +959,92 @@
                         "example": "GUILD_MANAGER"
                     },
                     "createdAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     },
                     "updatedAt": {
-                        "type": "number",
-                        "example": "1664914914"
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    }
+                }
+            },
+            "MessageResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firman"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "example@gmail.com"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "I so excited with your site, I want to send offer about further plan"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    }
+                }
+            },
+            "GameResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "example": {
+                            "seconds": 1666079335,
+                            "nanoseconds": 308000000
+                        }
                     }
                 }
             },
@@ -325,6 +1087,62 @@
                     "status": {
                         "type": "string",
                         "example": "UNAUTHORIZED"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {
+                                "type": "number",
+                                "example": "1664914914"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "Response409": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 409
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "CONFLIC"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "timestamp": {
+                                "type": "number",
+                                "example": "1664914914"
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "location": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "Response500": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 500
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "SERVER_ERROR"
                     },
                     "data": {
                         "type": "object",

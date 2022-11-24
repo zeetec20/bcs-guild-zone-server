@@ -3,7 +3,6 @@ const response = require('../helpers/response')
 const errorWithStatus = require("../helpers/errorWithStatus")
 const { Gamer, GuildManager } = require('../models')
 const userType = require('../helpers/userType')
-const { use } = require('../app')
 const { status } = response
 
 const login = async (req, res, next) => {
@@ -19,16 +18,11 @@ const login = async (req, res, next) => {
 }
 
 const getUser = async (req, res, next) => {
+    const {id} = req.user
+
     try {
-        const gamer = await Gamer.findById(req.user.id)
-        const guildManager = await GuildManager.findById(req.user.id)
-
-        if (gamer != null && guildManager != null) {
-            const user = gamer.type == userType.GAMER ? gamer : guildManager
-            return res.json(response(status.OK, user.toJson(true)))
-    }
-
-        next(errorWithStatus('User not found', status.NOT_FOUND))
+        const user = await services.authentication.user(id)
+        res.json(response(status.OK, user.toJson(true)))
     } catch (error) {
         next(error)
     }
@@ -38,7 +32,7 @@ const guildManagerRegister = async (req, res, next) => {
     const { email, password } = req.body
 
     try {
-        const user = await services.authentication.registerGameManager(email, password)
+        const user = await services.authentication.registerGuildManager(email, password)
         res.json(response(status.OK, user.toJson(true)))
     } catch (error) {
         next(error)

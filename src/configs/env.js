@@ -1,6 +1,7 @@
 const dotenv = require('dotenv')
+const mode = process.env.NODE_ENV
 dotenv.config({
-    path: `.env.${process.env.NODE_ENV}`
+    path: `.env.${mode == 'test' ? 'development' : process.env.NODE_ENV}`
 })
 
 module.exports = {

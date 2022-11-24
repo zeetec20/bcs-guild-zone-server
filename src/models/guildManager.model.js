@@ -1,112 +1,55 @@
-const {
-    collection,
-    Timestamp,
-    DocumentSnapshot,
-    addDoc,
-    getDoc,
-    getDocs,
-    updateDoc,
-    query,
-    where,
-    setDoc,
-    doc
-} = require('firebase/firestore')
+const { collection, Timestamp } = require("firebase/firestore")
 const database = require("../database")
-const utcDate = require('../helpers/utcDate')
-const userType = require('../helpers/userType')
+const userType = require("../helpers/userType")
+const utcDate = require("../helpers/utcDate")
+const { createModel, TypesField } = require("./model")
 
-const userCollection = collection(database, 'users')
-
-/**
- * @param  {DocumentSnapshot} snapshot
- */
-const snapshotToObject = (snapshot) => {
-    const data = snapshot.data()
-    const instance = new GuildManager({ id: snapshot.ref.id, ...data })
-    Object.keys(data).filter(key => instance[key] == undefined).forEach(key => instance.additionalField[key] = data[key])
-    instance.doc = snapshot.ref
-    return instance
-}
-
-/**
- * @param  {string} id
- * @returns {Promise<null | GuildManager>}
- */
-const findById = async (id) => {
-    const dRef = doc(database, userCollection.id, id)
-    const snapshot = await getDoc(dRef)
-    if (snapshot.exists()) return snapshotToObject(snapshot)
-    return null
-}
-
-/**
- * @param  {[
- *  ['field', '==', value]
- * ]} findQuery
- * @returns {Promise<[GuildManager]>}
- */
-const find = async (findQuery) => {
-    const q = query(userCollection, ...findQuery.map(query => where(...query)))
-    return (await getDocs(q)).docs.map(snapshot => snapshotToObject(snapshot))
-}
-
-/**
- * @returns {Promise<GuildManager[]>}
- */
-const findAll = async () => {
-    return (await getDocs(userCollection)).docs.map(snapshot => snapshotToObject(snapshot))
-}
-
-class GuildManager {
-    constructor({
-        id = null,
-        email,
-        type = userType.GUILD_MANAGER,
-        isHaveGuild = false,
-        createdAt = Timestamp.fromMillis(utcDate),
-        updatedAt = Timestamp.fromMillis(utcDate)
-    }) {
-        this.id = id
-        this.email = email
-        this.type = type
-        this.isHaveGuild = isHaveGuild
-        this.createdAt = createdAt
-        this.updatedAt = updatedAt
-        this.additionalField = {}
-        this.doc = null
-    }
-
-    toJson = (alsoId = false) => {
-        const json = {
-            email: this.email,
-            type: this.type,
-            isHaveGuild: this.isHaveGuild,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt,
-            ...this.additionalField
+const GuildManager = createModel(
+    [
+        {
+            name: 'email',
+            type: TypesField.string
+        },
+        {
+            name: 'type',
+            type: TypesField.string,
+            default: userType.GUILD_MANAGER,
+            required: false
+        },
+        {
+            name: 'isHaveGuild',
+            type: TypesField.boolean,
+            default: false,
+            required: false
+        },
+        {
+            name: 'guild',
+            type: TypesField.string,
+            default: null,
+            required: false
+        },
+        {
+            name: 'createdAt',
+            type: TypesField.object,
+            default: Timestamp.fromMillis(utcDate),
+            required: false
+        },
+        {
+            name: 'updatedAt',
+            type: TypesField.object,
+            default: Timestamp.fromMillis(utcDate),
+            required: false
         }
-        if (alsoId) json.id = this.id
-        return json
-    }
+    ],
+    collection(database, 'users')
+)
 
-    save = async () => {
-        if (this.doc == null) {
-            if (this.id != null) {
-                const dRef = doc(database, userCollection.id, this.id)
-                await setDoc(dRef, this.toJson())
-                this.doc = dRef
-            } else {
-                const dRef = await addDoc(userCollection, this.toJson())
-                this.id = dRef.id
-                this.doc = dRef
-            }
-        } else await updateDoc(this.doc, this.toJson())
-    }
+class GuildManagerRefactor extends GuildManager {
+    /**
+     * @param  {[string | FieldPath, WhereFilterOp, any][]} findQuery
+     * @returns {Promise<[GuildManagerRefactor]>}
+     */
+    static find = (findQuery) => GuildManager.find([['type', '==', userType.GUILD_MANAGER], ...findQuery])
 }
 
-module.exports = GuildManager
-
-module.exports.findById = findById
-module.exports.find = find
-module.exports.findAll = findAll
-module.exports.collection = userCollection
+module.exports = GuildManagerRefactor

@@ -2,7 +2,6 @@ const { status } = require("../helpers/response")
 const responseError = require('../helpers/responseError')
 
 module.exports = (err, req, res, next) => {
-    console.log(err)
     const message = (err.stack == undefined || err.code != 500) ? err.message : {
         message: err.message,
         error: err.stack

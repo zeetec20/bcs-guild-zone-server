@@ -4,5 +4,6 @@ module.exports = {
     validator: require('./validators'),
     upload: require('./upload.middleware'),
     uploadWithoutSave: require('./uploadWithoutSave.middleware'),
-    isAuthenticated: require('./isAuthenticated.middleware')
+    isAuthenticated: require('./isAuthenticated.middleware'),
+    notFound: require('./notFound.middleware')
 }

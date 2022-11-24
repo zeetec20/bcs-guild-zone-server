@@ -27,7 +27,7 @@ const joinGuild = async (id, guild, experience, recent_game) => {
     if (gamer == undefined) throw errorWithStatus('gamer is not found', status.NOT_FOUND)
     const guildObj = await Guild.findById(guild)
     if (guildObj == undefined) throw errorWithStatus('guild is not found', status.NOT_FOUND)
-    
+
     const member = new Member({
         name: gamer.name,
         email: gamer.email,

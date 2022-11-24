@@ -1,0 +1,8 @@
+{
+    "name": "Guild Zone",
+    "cwd": "/Users/zeetec/project/bcs-guild-zone-server",
+    "script": "npm",
+    "args": "start",
+    "watch": false,
+    "instances": "max"
+}

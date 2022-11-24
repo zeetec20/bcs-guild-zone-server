@@ -10,7 +10,7 @@ const joinGuild = async (req, res, next) => {
 
     try {
         const ressult = await services.guild.joinGuild(id, guild, experience, recent_game)
-        res.json(response(status.OK, ressult.toJson()))
+        res.json(response(status.OK, ressult.toJson(true)))
     } catch (error) {
         next(error)
     }
@@ -22,7 +22,7 @@ const joinGuildAnonymous = async (req, res, next) => {
 
     try {
         const ressult = await services.guild.joinGuildAnonnymous(guild, name, email, experience, recent_game)
-        res.json(response(status.OK, ressult.toJson()))
+        res.json(response(status.OK, ressult.toJson(true)))
     } catch (error) {
         next(error)
     }
@@ -33,7 +33,7 @@ const getGuild = async (req, res, next) => {
 
     try {
         const result = await services.guild.getGuild(id)
-        res.json(response(status.OK, result.toJson()))
+        res.json(response(status.OK, result.toJson(true)))
     } catch (error) {
         next(error)
     }
