@@ -2,7 +2,6 @@ const multer = require('multer');
 const path = require('path')
 const uuid = require('uuid')
 const { status } = require('../helpers/response');
-const sharp = require('sharp')
 
 /**
  * @param  {number} limit=3
